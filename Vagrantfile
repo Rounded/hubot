@@ -10,8 +10,8 @@ Vagrant.configure("2") do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  config.vm.box = "precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.box = "ubuntu13"
+  config.vm.box_url = "http://goo.gl/Y4aRr"
 
   # This can be set to the host name you wish the guest machine to have. Vagrant
   # will automatically execute the configuration necessary to make this happen.
@@ -57,14 +57,18 @@ Vagrant.configure("2") do |config|
   # path, and data_bags path (all relative to this Vagrantfile), and adding
   # some recipes and/or roles.
   #
-   config.vm.provision :chef_solo do |chef|
-     chef.cookbooks_path = "cookbooks"
-     chef.roles_path = "roles"
-     chef.data_bags_path = "data_bags"
-     chef.add_recipe "apt"
-     chef.add_recipe "build-essential"
-     chef.add_recipe "hubot"
-   end
+
+  config.vm.provision :chef_solo do |chef|
+    chef.encrypted_data_bag_secret_key_path = 'encrypted_data_bag_secret'
+    chef.cookbooks_path = "chef/cookbooks"
+    chef.roles_path = "chef/roles"
+    chef.data_bags_path = "chef/data_bags"
+    chef.add_recipe "apt"
+    chef.add_recipe "build-essential"
+    chef.add_recipe "git"
+    chef.add_recipe "supervisor"
+    chef.add_recipe "hubot"
+  end
 
   # Enable provisioning with chef server, specifying the chef server URL,
   # and the path to the validation key (relative to this Vagrantfile).
